@@ -1,7 +1,7 @@
 set echo off heading off feedback off verify off
 select 'Please enter dates in yyyymmddHH24 format:' from dual;
 select 'You have entered:', '&&BEGIN_DATE', '&&END_DATE' from dual;
- 
+
 PROMPT BEGIN Date is: &BEGIN_DATE
 PROMPT End Date is: &END_DATE
 set pages 0 termout off
@@ -37,24 +37,25 @@ BEGIN
       SELECT snap_id
         INTO :eid
         FROM dba_hist_snapshot
-	WHERE TO_CHAR (end_interval_time, 'yyyymmddhh24') = '&END_DATE';
+        WHERE TO_CHAR (end_interval_time, 'yyyymmddhh24') = '&END_DATE';
 END;
 /
 
-spool big_range.sql  
+spool big_range.sql
 
 SELECT '@pcreport  '
        || :bid
-       || ' ' 
+       || ' '
        || :eid
-       || ' ' 
+       || ' '
        || 'full_range_'|| :bid || '_' || :eid || '.html'
 FROM dual
 /
 
-spool off            
+spool off
 
 host cat big_range.sql >> batch.sql
+host echo "exit" >> batch.sql
 -- Reset terminal output and formatting
 SET PAGESIZE 24
 
@@ -63,3 +64,4 @@ set termout on
 select 'Generating Report Script batch.sql.....' from dual;
 select 'Report file created for snap_ids between:', '&&BEGIN_DATE', '&&END_DATE', 'Check file batch.sql' from dual;
 set echo on termout on verify on heading on feedback on
+[
