@@ -57,6 +57,7 @@ FROM dual
 spool off
 
 host cat big_range.sql >> batch.sql
+host echo "exit" >> batch.sql
 -- Reset terminal output and formatting
 SET PAGESIZE 24
 
@@ -66,3 +67,4 @@ select 'Generating Report Script batch.sql.....' from dual;
 select 'Report file created for snap_ids between:', '&&BEGIN_DATE', '&&END_DATE', 'Check file batch.sql' from dual;
 set echo on termout on verify on heading on feedback on
 exit;
+[
